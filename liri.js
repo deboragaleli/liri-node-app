@@ -2,6 +2,7 @@ var dotenv = require("dotenv").config();
 var keys = require("./keys");
 var Spotify = require('node-spotify-api');
 var request = require('request');
+let fs = require('fs'); 
 
 //If no song is provided then the program will default to "The Sign" by Ace of Base.
 function spotifyFunction(song) {
@@ -57,7 +58,21 @@ function movieFunction(movieName) {
   });
 }
 
-let pick = function(caseData, functionData) {
+function doWhatItSays() {
+  fs.readFile("random.txt", "utf8", function(error, data) {
+      console.log(data);
+      let dataArr = data.split(',')
+
+      if (dataArr.length == 2) {
+          pick(dataArr[0], dataArr[1]);
+      } else if (dataArr.length == 1) {
+          pick(dataArr[0]);
+      }
+
+  });
+}
+
+function pick(caseData, functionData) {
   switch (caseData) {
     case 'spotify-this-song':
       spotifyFunction(functionData);
@@ -74,7 +89,7 @@ let pick = function(caseData, functionData) {
 }
 
 //run this on load of js file
-let runThis = function(argOne, argTwo) {
+function runThis(argOne, argTwo) {
   pick(argOne, argTwo);
 };
 
